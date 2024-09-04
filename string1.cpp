@@ -9,11 +9,11 @@ struct InputPrint
     char **ptr_to_str;
 };
 
-void reset_to_zero( void *array, int size );
-void *my_recalloc( void *array, int size );
-void input( InputPrint *data );
-void print( InputPrint *data );
-int  input_str( char *str );
+void  reset_to_zero( void *array, int size );
+void  *my_recalloc( void *array, int size );
+void  input( InputPrint *data );
+void  print( InputPrint *data );
+char*  input_str( );
 
 int main()
 {
@@ -42,7 +42,6 @@ void *my_recalloc( void* array, int size )
 
 void input( InputPrint *data )
 {
-    char *str = NULL;
     int  overall_size_for_ptr = DEFAULT_SIZE;
 
     data->ptr_to_str = ( char ** )calloc( DEFAULT_SIZE, sizeof( char * ) );
@@ -51,11 +50,9 @@ void input( InputPrint *data )
 
     for ( int i = 0; i < data->size; i++ )
     {
-        int count_input_strings = 0;
+        int count_input_strings = 0;// TODO: fix this
 
-        input_str( str );
-
-        *( data->ptr_to_str + i ) = str;
+        *( data->ptr_to_str + i ) = input_str( );
 
         count_input_strings += 1;
 
@@ -75,13 +72,13 @@ void print( InputPrint *data )
     }
 }
 
-int input_str( char *str )
+char* input_str( )
 {
     int  count_input_symbols = 0;
     int  overall_size_for_str = DEFAULT_SIZE;
     char ch = 0;
 
-    str = ( char * )calloc( DEFAULT_SIZE, sizeof( char ) );
+    char *str = ( char * )calloc( DEFAULT_SIZE, sizeof( char ) );
 
     while ( ( ch = getchar() ) != '\n' )
     {
@@ -96,8 +93,11 @@ int input_str( char *str )
     }
 
     *( str + count_input_symbols ) = '\0';
-    printf( "%s\n", *( str + count_input_symbols ) );
 
-    return *str;
+    return str;
 }
 
+//hhhhaddduurr
+//4h1a3d2u2
+//
+//RLE !!!
