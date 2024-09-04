@@ -3,83 +3,101 @@
 
 const int DEFAULT_SIZE = 12;
 
-int  size_1 = 0;
-char **ptr_to_str = NULL;
+struct InputPrint
+{
+    int  size;
+    char **ptr_to_str;
+};
 
-void reset_to_zero( void *array_, int size );
-void *my_recalloc( void *array_, int size );
-void input( int *size_1 );
-void print( int size_1 );
+void reset_to_zero( void *array, int size );
+void *my_recalloc( void *array, int size );
+void input( InputPrint *data );
+void print( InputPrint *data );
+int  input_str( char *str );
 
 int main()
 {
-    void input( );
-    void print( int size_1 );
+    InputPrint data = {};
+
+    input( &data );
+    print( &data );
+
     return 0;
 }
 
-void reset_to_zero( void* array_, int size )
+void reset_to_zero( void* array, int size )
 {
     for ( int j = size; j < size * 2; j++ )
     {
-        ( ( char * )array_ )[j] = 0;
+        ( ( char * )array )[j] = 0;
     }
 }
 
-void *my_recalloc( void* array_, int size )
+void *my_recalloc( void* array, int size )
 {
-    array_ = ( char * )realloc( array_, size * 2 );
-    reset_to_zero( array_, size );
-    return array_;
+    array = ( char * )realloc( array, size * 2 );
+    reset_to_zero( array, size );
+    return array;
 }
 
-void input( int *size_1 )
+void input( InputPrint *data )
 {
     char *str = NULL;
     int  overall_size_for_ptr = DEFAULT_SIZE;
 
-    ptr_to_str = ( char ** )calloc( DEFAULT_SIZE, sizeof( char * ) );
+    data->ptr_to_str = ( char ** )calloc( DEFAULT_SIZE, sizeof( char * ) );
 
-    scanf( "%d ", &size_1 );
+    scanf( "%d ", &data->size );
 
-    for ( int i = 0; i < ( int )size_1; i++ )
+    for ( int i = 0; i < data->size; i++ )
     {
-        int count_input_symbols = 0;
         int count_input_strings = 0;
-        char ch = 0;
-        int overall_size_for_str = DEFAULT_SIZE;
 
-        str = ( char * )calloc( DEFAULT_SIZE, sizeof( char ) );
+        input_str( str );
 
-        while ( ( ch = getchar() ) != '\n' )
-        {
-            *( str + count_input_symbols ) = ch;
-            count_input_symbols += 1;
+        *( data->ptr_to_str + i ) = str;
 
-            if ( count_input_symbols >= overall_size_for_str )
-            {
-               my_recalloc( str, overall_size_for_str );
-            }
-        }
-
-        *( str + count_input_symbols ) = '\0';
-
-        *( ptr_to_str + i ) = str;
         count_input_strings += 1;
 
         if ( count_input_strings >= overall_size_for_ptr )
         {
-            my_recalloc( ptr_to_str, overall_size_for_ptr );
+            my_recalloc( data->ptr_to_str, overall_size_for_ptr );
         }
 
     }
 }
 
-void print( int size_1, char **ptr_to_str )
+void print( InputPrint *data )
 {
-    for ( int i = 0; i < size_1; i++ )
+    for ( int i = 0; i < data->size; i++ )
     {
-        printf( "%s\n", *( ptr_to_str + i ) );
+        printf( "%s\n", *( data->ptr_to_str + i ) );
     }
+}
+
+int input_str( char *str )
+{
+    int  count_input_symbols = 0;
+    int  overall_size_for_str = DEFAULT_SIZE;
+    char ch = 0;
+
+    str = ( char * )calloc( DEFAULT_SIZE, sizeof( char ) );
+
+    while ( ( ch = getchar() ) != '\n' )
+    {
+        *( str + count_input_symbols ) = ch;
+
+        count_input_symbols += 1;
+
+        if ( count_input_symbols >= overall_size_for_str )
+        {
+           my_recalloc( str, overall_size_for_str );
+        }
+    }
+
+    *( str + count_input_symbols ) = '\0';
+    printf( "%s\n", *( str + count_input_symbols ) );
+
+    return *str;
 }
 
